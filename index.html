@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>京东H5活动脚手架开发总结</title>
+    <meta name="description" content="">
+    
+    
+    <link rel="preload" href="/Articles/assets/css/0.styles.d0cf2759.css" as="style"><link rel="preload" href="/Articles/assets/js/app.ee76e7fa.js" as="script"><link rel="preload" href="/Articles/assets/js/5.2ff0d1c8.js" as="script"><link rel="prefetch" href="/Articles/assets/js/2.23124c79.js"><link rel="prefetch" href="/Articles/assets/js/3.85183968.js"><link rel="prefetch" href="/Articles/assets/js/4.07732050.js"><link rel="prefetch" href="/Articles/assets/js/6.703218a9.js"><link rel="prefetch" href="/Articles/assets/js/7.13520ff0.js">
+    <link rel="stylesheet" href="/Articles/assets/css/0.styles.d0cf2759.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container no-sidebar"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/Articles/" class="home-link router-link-exact-active router-link-active"></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><!---->  <!----> </div> <div class="page"> <div class="content"><h1 id="总结-京东h5活动开发脚手架"><a href="#总结-京东h5活动开发脚手架" aria-hidden="true" class="header-anchor">#</a> [总结] - 京东H5活动开发脚手架</h1> <p>此框架主要用于开发京东移动端的运营活动页面</p> <h2 id="为什么要开发这个框架？"><a href="#为什么要开发这个框架？" aria-hidden="true" class="header-anchor">#</a> 为什么要开发这个框架？</h2> <p>当然主要就是提高开发效率，目前我们可以通过<a href="http://babel.m.jd.com/" target="_blank" rel="noopener noreferrer">通天塔平台<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a>，使用运营模式快速搭建活动，但是运营模式并不能满足各种特殊需求,而且越来越多需求通过自定义开发来实现。</p> <p>如果使用自定义开发，即使一个简单的活动页，里面也可能涉及到很多业务逻辑，举个例子，当点击一个链接的时候需要判断当前在什么环境，如果是京东APP内，需要用原生的协议跳转，每个链接的跳转协议
+也是不同，如首页，商详页，店铺页等等都是需要处理，非APP环境，微信手Q也是需要兼容、最后还有点击后需要提交埋点、还有一些优惠券、抽奖、京东提醒的功能要开发也是得看半天文档才能下手、所以我们要做的
+就是把这些功能都整合到框架里面、开发者不用去管跟后端的交互。</p> <h2 id="我们想要一个怎么样的框架"><a href="#我们想要一个怎么样的框架" aria-hidden="true" class="header-anchor">#</a> 我们想要一个怎么样的框架</h2> <p>一定是要简单容易上手，能满足平时的业务需求，所以VUE是比较好的选择，VUE的开发模式本身很适合单页应用，上手简单，即使没接触过的看下官方文档基本一天也能上手，还有就是组件式开发，方便后续模板积累和分享，为什么不用VUEX和REACT？，主要上手难度相对复杂，且运营活动本来就是简单的单页应用不需要用到状态管理。</p> <h2 id="目前做了哪些"><a href="#目前做了哪些" aria-hidden="true" class="header-anchor">#</a> 目前做了哪些</h2> <h3 id="目录结构"><a href="#目录结构" aria-hidden="true" class="header-anchor">#</a> 目录结构</h3> <p>两个字简单</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token punctuation">.</span>
+├─ dist         <span class="token comment">//打包后发布的目录</span>
+├─ src          <span class="token comment">//开发目录</span>
+    ├─ components
+    │  ├─ base  <span class="token comment">//存放的是一些业务组件，比如单个商品、优惠券、加入购物车、秒杀组件等等</span>
+    │  └─ ui    <span class="token comment">//存放UI组件，如tab，吸顶导航、倒计时、Toast等</span>
+    ├─ css      <span class="token comment">//额外的css</span>
+    ├─ img      <span class="token comment">//额外的img</span>
+    ├─ js       <span class="token comment">//存放一些初始化JS和工具类js</span>
+    ├─ App<span class="token punctuation">.</span>vue  <span class="token comment">//入口页面、页面代码从这里开始</span>
+    ├─ conf<span class="token punctuation">.</span>js  <span class="token comment">//配置通天塔广告组商品组、页面分享信息等</span>
+    └─ main<span class="token punctuation">.</span>js  <span class="token comment">// vue的初始化JS</span>
+
+</code></pre></div><h3 id="拉取数据"><a href="#拉取数据" aria-hidden="true" class="header-anchor">#</a> 拉取数据</h3> <p>运营活动一般都是需要拉取很多数据，所以我们希望能统一配置一次性拉取</p> <p>在<code>conf.js</code>里,我们现在拉一条广告组合商品组</p> <div class="language-js extra-class"><pre class="language-js"><code>advertIds<span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span>
+    floor1<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        id<span class="token punctuation">:</span> <span class="token string">'01274865'</span><span class="token punctuation">,</span>
+        report<span class="token punctuation">:</span> <span class="token string">'Babel,123_{advertId}_01110113'</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    
+<span class="token punctuation">}</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+productIds<span class="token punctuation">:</span><span class="token punctuation">[</span><span class="token punctuation">{</span>
+    hotSale<span class="token punctuation">:</span> <span class="token punctuation">{</span>
+        id<span class="token punctuation">:</span> <span class="token string">'03019457'</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span><span class="token punctuation">]</span>
+</code></pre></div><p>拉广告组在<code>advertIds</code>里配置，商品组在<code>productIds</code>里配置</p> <p><code>floor1</code> 为广告组的对象名，自己命名，注意如果拉多条数据命名不要相同，名称相同只会返回一条</p> <p><code>id</code> 广告组id（广告组是从通天塔系统中配置）</p> <p><code>report</code> 埋点需要，可不填</p> <p><em>如果要更复杂的查询需求可配置在<code>composite</code>里面，具体使用方法需要看<a href="https://cf.jd.com/pages/viewpage.action?pageId=97076677" target="_blank" rel="noopener noreferrer">这里<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></em></p> <p><strong>使用示例</strong></p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token comment">// App.vue</span>
+
+<span class="token operator">&lt;</span>template<span class="token operator">&gt;</span>
+    <span class="token operator">&lt;</span>div id<span class="token operator">=</span><span class="token string">&quot;app&quot;</span><span class="token operator">&gt;</span>
+        <span class="token operator">&lt;</span>div v<span class="token operator">-</span><span class="token keyword">if</span><span class="token operator">=</span><span class="token string">&quot;data.loaded&quot;</span><span class="token operator">&gt;</span>
+            <span class="token punctuation">{</span><span class="token punctuation">{</span>data<span class="token punctuation">.</span>advs<span class="token punctuation">.</span>floor1<span class="token punctuation">}</span><span class="token punctuation">}</span>
+            <span class="token punctuation">{</span><span class="token punctuation">{</span>data<span class="token punctuation">.</span>products<span class="token punctuation">.</span>hotSale<span class="token punctuation">}</span><span class="token punctuation">}</span>
+        <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">&gt;</span>
+    <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">&gt;</span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>template<span class="token operator">&gt;</span>
+
+<span class="token operator">&lt;</span>script<span class="token operator">&gt;</span>
+<span class="token keyword">export</span> <span class="token keyword">default</span><span class="token punctuation">{</span>
+    <span class="token function">data</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token punctuation">{</span>
+            data<span class="token punctuation">:</span><span class="token keyword">this</span><span class="token punctuation">.</span>$root<span class="token punctuation">.</span>data
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>script<span class="token operator">&gt;</span>
+
+</code></pre></div><p><em><strong>拉取后的数据是保存在<code>data.advs</code>,<code>data.products</code>内，由于拉取数据是异步的，确保所有数据拉取完毕再显示,加上判断<code>data.loaded</code></strong></em></p> <h3 id="跳转和发送埋点"><a href="#跳转和发送埋点" aria-hidden="true" class="header-anchor">#</a> 跳转和发送埋点</h3> <p>给标签(可以是div,span)添加<code>jump</code>属性,<code>jump</code>值按特定的规则填写，用<code>|</code>分隔,看下面示例代码</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token comment">//商品详情页</span>
+<span class="token operator">&lt;</span>a jump<span class="token operator">=</span><span class="token string">&quot;item|skuid|eventId,param&quot;</span><span class="token operator">&gt;</span><span class="token operator">&lt;</span><span class="token operator">/</span>a<span class="token operator">&gt;</span>
+<span class="token comment">//店铺页</span>
+<span class="token operator">&lt;</span>a jump<span class="token operator">=</span><span class="token string">&quot;shop|shopId|eventId,param&quot;</span><span class="token operator">&gt;</span><span class="token operator">&lt;</span><span class="token operator">/</span>a<span class="token operator">&gt;</span>
+<span class="token comment">//广告位</span>
+<span class="token operator">&lt;</span>a jump<span class="token operator">=</span><span class="token string">&quot;adv|url|type|eventId,param&quot;</span><span class="token operator">&gt;</span><span class="token operator">&lt;</span><span class="token operator">/</span>a<span class="token operator">&gt;</span>
+<span class="token comment">//首页</span>
+<span class="token operator">&lt;</span>a jump<span class="token operator">=</span><span class="token string">&quot;home|eventId,param&quot;</span><span class="token operator">&gt;</span><span class="token operator">&lt;</span><span class="token operator">/</span>a<span class="token operator">&gt;</span>
+<span class="token comment">//去登录页</span>
+<span class="token operator">&lt;</span>a jump<span class="token operator">=</span><span class="token string">&quot;login|eventId,param&quot;</span><span class="token operator">&gt;</span><span class="token operator">&lt;</span><span class="token operator">/</span>a<span class="token operator">&gt;</span>
+<span class="token comment">//优惠券中心</span>
+<span class="token operator">&lt;</span>a jump<span class="token operator">=</span><span class="token string">&quot;couponCenter|eventId,param&quot;</span><span class="token operator">&gt;</span><span class="token operator">&lt;</span><span class="token operator">/</span>a<span class="token operator">&gt;</span>
+<span class="token comment">//不跳转只发送埋点</span>
+<span class="token operator">&lt;</span>a jump<span class="token operator">=</span><span class="token string">&quot;eventId,param&quot;</span><span class="token operator">&gt;</span><span class="token operator">&lt;</span><span class="token operator">/</span>a<span class="token operator">&gt;</span>
+···
+</code></pre></div><h3 id="业务组件"><a href="#业务组件" aria-hidden="true" class="header-anchor">#</a> 业务组件</h3> <p>一般需要跟数据交互的组件会归类为业务组件，如一条广告组数据，一条商品组数据，加入购物车按钮，优惠券等。</p> <p><strong>商品组件示例（单条商品）</strong></p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token comment">//App.vue</span>
+<span class="token operator">&lt;</span>template<span class="token operator">&gt;</span>
+    <span class="token operator">&lt;</span>ul<span class="token operator">&gt;</span>
+        <span class="token operator">&lt;</span>li v<span class="token operator">-</span><span class="token keyword">for</span><span class="token operator">=</span><span class="token string">&quot;(item,index) in data.list&quot;</span><span class="token operator">&gt;</span>
+            <span class="token operator">&lt;</span>Product
+                <span class="token punctuation">:</span>item<span class="token operator">=</span><span class="token string">&quot;item&quot;</span>
+                <span class="token punctuation">:</span>index<span class="token operator">=</span><span class="token string">&quot;index&quot;</span>
+                <span class="token punctuation">:</span>report<span class="token operator">=</span><span class="token string">&quot;data.report&quot;</span>
+                <span class="token punctuation">:</span>fields<span class="token operator">=</span><span class="token string">&quot;['tag','mkPrice']&quot;</span>
+            <span class="token operator">&gt;</span>
+            <span class="token comment">//其它自定义</span>
+            <span class="token operator">...</span>
+            
+            <span class="token operator">&lt;</span><span class="token operator">/</span>Product<span class="token operator">&gt;</span>
+        <span class="token operator">&lt;</span><span class="token operator">/</span>li<span class="token operator">&gt;</span>
+    <span class="token operator">&lt;</span><span class="token operator">/</span>ul<span class="token operator">&gt;</span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>template<span class="token operator">&gt;</span>
+<span class="token operator">&lt;</span>script<span class="token operator">&gt;</span>
+<span class="token keyword">export</span> <span class="token keyword">default</span><span class="token punctuation">{</span>
+    <span class="token function">data</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">return</span> <span class="token punctuation">{</span>
+            <span class="token comment">//hotSale在前面conf里配置获取的数据</span>
+            data<span class="token punctuation">:</span><span class="token keyword">this</span><span class="token punctuation">.</span>$root<span class="token punctuation">.</span>data<span class="token punctuation">.</span>product<span class="token punctuation">.</span>hotSale
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>script<span class="token operator">&gt;</span>
+<span class="token comment">//...其它省略</span>
+
+  
+</code></pre></div><blockquote><p>Product是单条数据，不是一个列表，所以循环还是需要自己写。</p></blockquote> <p><strong>参数说明</strong></p> <ul><li><code>item</code>:一条商品组数据</li> <li><code>index</code>: 在列表中的顺序</li> <li><code>report</code>:埋点,例：'Babel_xxx_,aaa_{name}_{index}',<code>{}</code>内的变量是数据中的字段</li> <li><code>fields</code> 字段，商品组默认显示商品链接，商品名称，商品图片，京东价格，如果需要其它则添加你想要的字段，填写的字段名必须跟数据里的字段一致</li></ul> <p>建议安装官方调试工具(chrome插件）<a href="https://github.com/vuejs/vue-devtools" target="_blank" rel="noopener noreferrer">vue-devtools<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a>，可以方便查看所有字段</p> <p>组件默认显示几个常用的字段，如果不想显示可以通过Style隐藏或者在fields里设置,</p> <div class="language-js extra-class"><pre class="language-js"><code>fields<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">'!link'</span><span class="token punctuation">,</span>    <span class="token comment">//链接</span>
+        <span class="token string">'!name'</span><span class="token punctuation">,</span>    <span class="token comment">//商品名</span>
+        <span class="token string">'!image'</span><span class="token punctuation">,</span>   <span class="token comment">//图片</span>
+        <span class="token string">'!jdPrice'</span>  <span class="token comment">//价格</span>
+        <span class="token punctuation">]</span>
+</code></pre></div><p>当然如果你都不显示其实也没必要使用Product组件</p> <p>其它自定义内容写在Product标签内，如：</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token operator">&lt;</span>Product<span class="token operator">&gt;</span>
+    <span class="token operator">&lt;</span>span<span class="token operator">&gt;</span><span class="token punctuation">{</span><span class="token punctuation">{</span> item<span class="token punctuation">.</span>tag <span class="token punctuation">}</span><span class="token punctuation">}</span><span class="token operator">&lt;</span><span class="token operator">/</span>span<span class="token operator">&gt;</span>
+    <span class="token operator">&lt;</span>a jump<span class="token operator">=</span><span class="token string">&quot;shop|123|xx&quot;</span><span class="token operator">&gt;</span>去店铺<span class="token operator">&lt;</span><span class="token operator">/</span>a<span class="token operator">&gt;</span>
+    <span class="token operator">&lt;</span>AddCart<span class="token operator">&gt;</span><span class="token operator">&lt;</span><span class="token operator">/</span>AddCart<span class="token operator">&gt;</span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>Product<span class="token operator">&gt;</span>
+</code></pre></div><h3 id="ui组件"><a href="#ui组件" aria-hidden="true" class="header-anchor">#</a> UI组件</h3> <p>优先找一些优秀的第三方组件，如果满足不了需求则自己重写。</p> <h4 id="modal"><a href="#modal" aria-hidden="true" class="header-anchor">#</a> Modal</h4> <p>一个比较简单的弹窗组件,没有使用js,示例：</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token operator">&lt;</span>template<span class="token operator">&gt;</span>
+    <span class="token operator">&lt;</span>Modal v<span class="token operator">-</span><span class="token keyword">if</span><span class="token operator">=</span><span class="token string">&quot;show&quot;</span><span class="token operator">&gt;</span>
+        <span class="token operator">&lt;</span>div solt<span class="token operator">=</span><span class="token string">&quot;head&quot;</span><span class="token operator">&gt;</span>head<span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">&gt;</span>
+        <span class="token operator">&lt;</span>div solt<span class="token operator">=</span><span class="token string">&quot;body&quot;</span><span class="token operator">&gt;</span>
+            body
+            <span class="token operator">&lt;</span>a @click<span class="token operator">=</span><span class="token string">&quot;$emit('close')&quot;</span> <span class="token operator">&gt;</span><span class="token operator">&lt;</span><span class="token operator">/</span>a<span class="token operator">&gt;</span>
+        <span class="token operator">&lt;</span><span class="token operator">/</span>div<span class="token operator">&gt;</span>
+        
+    <span class="token operator">&lt;</span><span class="token operator">/</span>Modal<span class="token operator">&gt;</span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>template<span class="token operator">&gt;</span>
+<span class="token operator">&lt;</span>script<span class="token operator">&gt;</span>
+    <span class="token keyword">export</span> <span class="token keyword">default</span><span class="token punctuation">{</span>
+        <span class="token function">data</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+            <span class="token keyword">return</span><span class="token punctuation">{</span>
+                <span class="token comment">//控制显示隐藏</span>
+                show<span class="token punctuation">:</span><span class="token boolean">true</span>
+            <span class="token punctuation">}</span>
+        <span class="token punctuation">}</span>
+    <span class="token punctuation">}</span>
+<span class="token operator">&lt;</span><span class="token operator">/</span>script<span class="token operator">&gt;</span>
+</code></pre></div><p><a href="/Articles/UI.html#stickynav">StickyNav</a></p> <p><a href="/Articles/UI.html#tabs">Tabs</a></p> <p>Slide 推荐使用<a href="https://surmon-china.github.io/vue-awesome-swiper/" target="_blank" rel="noopener noreferrer">swiper<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p> <h3 id="开始使用"><a href="#开始使用" aria-hidden="true" class="header-anchor">#</a> 开始使用</h3> <div class="language-bash extra-class"><pre class="language-bash"><code><span class="token comment"># 克隆到你本地</span>
+$ <span class="token function">git</span> clone git@git.jd.com:element/h5app-vue-boilerplate.git <span class="token punctuation">{</span>project<span class="token punctuation">}</span>
+<span class="token comment"># 进入目录</span>
+$ <span class="token function">cd</span> <span class="token punctuation">{</span>project<span class="token punctuation">}</span>
+<span class="token comment"># 提交前更改你的git地址</span>
+$ <span class="token function">git</span> remote set-url <span class="token punctuation">{</span>your <span class="token function">git</span> address<span class="token punctuation">}</span>
+<span class="token comment"># 安装依赖 建议使用jnpm</span>
+$ jnpm <span class="token function">install</span>
+<span class="token comment"># 启动项目</span>
+$ <span class="token function">npm</span> start
+<span class="token comment"># 打包</span>
+$ <span class="token function">npm</span> run build
+</code></pre></div><blockquote><p>由于某些依赖组件存放在京东NPM库中建议使用jnpm安装
+<a href="http://npm.m.jd.com/" target="_blank" rel="noopener noreferrer">jnpm<svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></p></blockquote> <div class="tip custom-block"><p class="custom-block-title">开发过程中的建议</p> <p>从数据驱动界面的思路去开发，不同于JQ通过操作dom，熟悉后开发效率有明显的提高</p> <p>尽量不要引入jQuery,zepto等库，因为本身是移动端开发，没有什么兼容性问题，原生API + ES6已经足够使用</p></div> <blockquote><p>在开发过程有什么问题请联系lijie8@jd.com</p></blockquote> <h2 id="最后"><a href="#最后" aria-hidden="true" class="header-anchor">#</a> 最后</h2></div> <div class="page-edit"><!----> <!----></div> <!----> </div> <!----></div></div>
+    <script src="/Articles/assets/js/5.2ff0d1c8.js" defer></script><script src="/Articles/assets/js/app.ee76e7fa.js" defer></script>
+  </body>
+</html>
